@@ -28,6 +28,8 @@
 #include "chrome/common/chrome_switches.h"
 #include "chrome/common/chrome_version.h"
 #include "components/embedder_support/user_agent_utils.h"
+#include "components/media_router/browser/presentation/presentation_service_delegate_impl.h"
+#include "chrome/browser/media/router/media_router_feature.h"
 #include "components/net_log/chrome_net_log.h"
 #include "components/network_hints/common/network_hints.mojom.h"
 #include "content/browser/keyboard_lock/keyboard_lock_service_impl.h"  // nogncheck
@@ -761,6 +763,16 @@ bool ElectronBrowserClient::ShouldUseProcessPerSite(
   return content::ContentBrowserClient::ShouldUseProcessPerSite(browser_context,
                                                                 effective_url);
 #endif
+}
+
+content::ControllerPresentationServiceDelegate*
+ElectronBrowserClient::GetControllerPresentationServiceDelegate(
+    content::WebContents* web_contents) {
+  if (media_router::MediaRouterEnabled(web_contents->GetBrowserContext())) {
+    return media_router::PresentationServiceDelegateImpl::
+        GetOrCreateForWebContents(web_contents);
+  }
+  return nullptr;
 }
 
 void ElectronBrowserClient::GetMediaDeviceIDSalt(

@@ -306,11 +306,15 @@ class ElectronBrowserClient : public content::ContentBrowserClient,
                       const GURL& site_url) override;
   bool ShouldUseProcessPerSite(content::BrowserContext* browser_context,
                                const GURL& effective_url) override;
+  content::ControllerPresentationServiceDelegate*
+  GetControllerPresentationServiceDelegate(
+      content::WebContents* web_contents) override;
   void GetMediaDeviceIDSalt(
       content::RenderFrameHost* rfh,
       const net::SiteForCookies& site_for_cookies,
       const blink::StorageKey& storage_key,
       base::OnceCallback<void(bool, const std::string&)> callback) override;
+      
   base::FilePath GetLoggingFileName(const base::CommandLine& cmd_line) override;
 
   // content::RenderProcessHostObserver:
